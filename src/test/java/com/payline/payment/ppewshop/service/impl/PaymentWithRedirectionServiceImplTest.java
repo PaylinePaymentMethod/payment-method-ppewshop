@@ -50,7 +50,7 @@ class PaymentWithRedirectionServiceImplTest {
     private static Stream<Arguments> statusCode_set() {
         return Stream.of(
                 Arguments.of(CheckStatusOut.StatusCode.A, PaymentResponseSuccess.class, null),
-                Arguments.of(CheckStatusOut.StatusCode.E, PaymentResponseOnHold.class, null),
+                Arguments.of(CheckStatusOut.StatusCode.E, PaymentResponseSuccess.class, null),
                 Arguments.of(CheckStatusOut.StatusCode.I, PaymentResponseRedirect.class, null),
                 Arguments.of(CheckStatusOut.StatusCode.R, PaymentResponseFailure.class, FailureCause.REFUSED),
                 Arguments.of(CheckStatusOut.StatusCode.C, PaymentResponseFailure.class, FailureCause.CANCEL)

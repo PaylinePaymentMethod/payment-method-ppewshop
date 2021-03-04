@@ -11,13 +11,11 @@ import com.payline.payment.ppewshop.service.HttpService;
 import com.payline.payment.ppewshop.utils.Constants;
 import com.payline.payment.ppewshop.utils.PluginUtils;
 import com.payline.pmapi.bean.common.FailureCause;
-import com.payline.pmapi.bean.common.OnHoldCause;
 import com.payline.pmapi.bean.payment.request.RedirectionPaymentRequest;
 import com.payline.pmapi.bean.payment.request.TransactionStatusRequest;
 import com.payline.pmapi.bean.payment.response.PaymentResponse;
 import com.payline.pmapi.bean.payment.response.buyerpaymentidentifier.impl.Email;
 import com.payline.pmapi.bean.payment.response.impl.PaymentResponseFailure;
-import com.payline.pmapi.bean.payment.response.impl.PaymentResponseOnHold;
 import com.payline.pmapi.bean.payment.response.impl.PaymentResponseRedirect;
 import com.payline.pmapi.bean.payment.response.impl.PaymentResponseSuccess;
 import com.payline.pmapi.logger.LogManager;
@@ -69,13 +67,11 @@ public class PaymentWithRedirectionServiceImpl implements PaymentWithRedirection
             CheckStatusOut.StatusCode statusCode = checkStatusResponse.getCheckStatusOut().getStatusCode();
             switch (statusCode) {
                 case A:
+                case E:
                     paymentResponse = createPaymentResponseSuccess(transactionId
                             , statusCode
                             , email
                             , checkStatusResponse.getCheckStatusOut().getCreditAuthorizationNumber());
-                    break;
-                case E:
-                    paymentResponse = createPaymentResponseOnHold(transactionId, statusCode);
                     break;
                 case I:
                     paymentResponse = createResponseRedirect(transactionId
@@ -135,15 +131,6 @@ public class PaymentWithRedirectionServiceImpl implements PaymentWithRedirection
                 .withPartnerTransactionId(partnerTransactionId)
                 .withTransactionDetails(Email.EmailBuilder.anEmail().withEmail(email).build())
                 .withTransactionAdditionalData(additionalData)
-                .withStatusCode(statusCode.name())
-                .build();
-    }
-
-    private PaymentResponseOnHold createPaymentResponseOnHold(String partnerTransactionId, CheckStatusOut.StatusCode  statusCode) {
-        return PaymentResponseOnHold.PaymentResponseOnHoldBuilder
-                .aPaymentResponseOnHold()
-                .withPartnerTransactionId(partnerTransactionId)
-                .withOnHoldCause(OnHoldCause.ASYNC_RETRY)
                 .withStatusCode(statusCode.name())
                 .build();
     }
