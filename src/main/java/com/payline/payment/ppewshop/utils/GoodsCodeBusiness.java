@@ -1,7 +1,5 @@
 package com.payline.payment.ppewshop.utils;
 
-import com.payline.payment.ppewshop.service.HttpService;
-
 import java.util.HashMap;
 import java.util.Map;
 

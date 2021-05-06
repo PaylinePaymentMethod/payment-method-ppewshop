@@ -75,7 +75,12 @@ public class PaymentWithRedirectionServiceImpl implements PaymentWithRedirection
                             , checkStatusResponse.getCheckStatusOut().getCreditAuthorizationNumber());
                     break;
                 case E:
-                    paymentResponse = createPaymentResponseOnHold(transactionId, statusCode);
+                    paymentResponse = PaymentResponseOnHold.PaymentResponseOnHoldBuilder.aPaymentResponseOnHold()
+                            .withPartnerTransactionId(transactionId)
+                            .withStatusCode(statusCode.name())
+                            .withBuyerPaymentId(Email.EmailBuilder.anEmail().withEmail(email).build())
+                            .withOnHoldCause(OnHoldCause.INPROGRESS_PARTNER)
+                            .build();
                     break;
                 case I:
                     paymentResponse = createResponseRedirect(transactionId
@@ -135,15 +140,6 @@ public class PaymentWithRedirectionServiceImpl implements PaymentWithRedirection
                 .withPartnerTransactionId(partnerTransactionId)
                 .withTransactionDetails(Email.EmailBuilder.anEmail().withEmail(email).build())
                 .withTransactionAdditionalData(additionalData)
-                .withStatusCode(statusCode.name())
-                .build();
-    }
-
-    private PaymentResponseOnHold createPaymentResponseOnHold(String partnerTransactionId, CheckStatusOut.StatusCode  statusCode) {
-        return PaymentResponseOnHold.PaymentResponseOnHoldBuilder
-                .aPaymentResponseOnHold()
-                .withPartnerTransactionId(partnerTransactionId)
-                .withOnHoldCause(OnHoldCause.ASYNC_RETRY)
                 .withStatusCode(statusCode.name())
                 .build();
     }

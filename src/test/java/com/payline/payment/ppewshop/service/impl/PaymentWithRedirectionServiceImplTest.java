@@ -26,7 +26,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.stream.Stream;
 
@@ -87,7 +86,7 @@ class PaymentWithRedirectionServiceImplTest {
         } else if (responseClass.equals(PaymentResponseOnHold.class)) {
             PaymentResponseOnHold responseOnHold = (PaymentResponseOnHold) response;
             Assertions.assertEquals(transactionId, responseOnHold.getPartnerTransactionId());
-            Assertions.assertEquals(OnHoldCause.ASYNC_RETRY, responseOnHold.getOnHoldCause());
+            Assertions.assertEquals(OnHoldCause.INPROGRESS_PARTNER, responseOnHold.getOnHoldCause());
 
         } else if (responseClass.equals(PaymentResponseRedirect.class)) {
             PaymentResponseRedirect responseRedirect = (PaymentResponseRedirect) response;
